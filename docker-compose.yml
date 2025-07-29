@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  geoanalytic_imagev2:
+    build:
+      context: . # Tells Docker Compose to look for the Dockerfile in the current directory
+      dockerfile: dockerfile # Specifies the name of your Dockerfile
+    ports:
+      - "8888:8888"    # Jupyter
+      - "8501:8501"    # Streamlit
+    volumes:
+      # Mounted local notebooks directory into the container.
+      # Local Machine C:/Docker/Dockerfiles/StarboardPython/notebooks:
+      # './notebooks' assumes a 'notebooks' folder exists relative to your docker-compose.yml
+      - C:/Docker/Dockerfiles/StarboardMaritime_July2025_Copy/notebooks:/app/notebooks
+      
+      # Mount the other directories if you want them to persist on your host
+      - ./data_quality_profiles:/app/data_quality_profiles
+      - ./data_star_schema_prep:/app/data_star_schema_prep
+      - ./etl_development:/app/etl_development
+      - ./src_data:/app/src_data
+      - ./notebooks:/app/notebooks
+      - ./dashboard:/app/dashboard
+
+    environment:
+      - PYSPARK_PYTHON=python3
+      - PYSPARK_DRIVER_PYTHON=python3
+      - JAVA_HOME=/usr/lib/jvm/default-java 
+            # Optional: Set a specific token for Jupyter login. Replace 'your_secret_token'
+      # with a strong, unique token. If not set, Jupyter will generate one on startup.
+      - JUPYTER_TOKEN=Kings9143884
+      # Optional: Set environment variables for Spark if needed, e.g., memory limits
+      # These can be important for larger Spark jobs.
+      - SPARK_DRIVER_MEMORY=8g
+      - SPARK_EXECUTOR_MEMORY=8g
+      - SPARK_EXECUTOR_CORES=4
+    container_name: geoanalytic_containerv2 # Give your container a specific name
+    restart: unless-stopped # Automatically restart the container unless it's explicitly stopped
