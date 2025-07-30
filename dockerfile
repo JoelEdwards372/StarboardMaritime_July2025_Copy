@@ -36,6 +36,13 @@ RUN mkdir -p /app/data_quality_profiles && \
 
 # Expose Jupyter and Streamlit ports
 EXPOSE 8888 8501
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+# Copy and set permissions
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+# Set default command
+CMD ["/start.sh"]
 
 #docker compose up --build -d
+#docker-compose build --no-cache
+#docker-compose up -d  # Rebuild and launch with new script
