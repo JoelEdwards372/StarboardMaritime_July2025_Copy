@@ -11,10 +11,8 @@ services:
     volumes:
       # Mounted local notebooks directory into the container.
       # Local Machine C:/Docker/Dockerfiles/StarboardPython/notebooks:
-      # './notebooks' assumes a 'notebooks' folder exists relative to your docker-compose.yml
-      - C:/Docker/Dockerfiles/StarboardMaritime_July2025_Copy/notebooks:/app/notebooks
-      
-      # Mount the other directories if you want them to persist on your host
+      # Mount directories to persist on your host
+      - /.notebooks:/app/notebooks
       - ./data_quality_profiles:/app/data_quality_profiles
       - ./data_star_schema_prep:/app/data_star_schema_prep
       - ./etl_development:/app/etl_development
@@ -35,4 +33,3 @@ services:
       - SPARK_EXECUTOR_MEMORY=8g
       - SPARK_EXECUTOR_CORES=4
     container_name: geoanalytic_containerv2 # Give your container a specific name
-    restart: unless-stopped # Automatically restart the container unless it's explicitly stopped
